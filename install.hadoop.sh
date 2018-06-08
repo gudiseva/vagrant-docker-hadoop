@@ -29,24 +29,28 @@ sudo /bin/su -c "echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.conf"
 sudo /bin/su -c "echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf"
 sudo /bin/su -c "echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf"
 sudo sysctl -p
-
-cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+#cat /proc/sys/net/ipv6/conf/all/disable_ipv6
 
 # Disable Firewall
 sudo ufw disable
-sudo ufw status
+#sudo ufw status
 
 # Remove SE-Linuxl
+if false
+then
+
 apparmor_status
 sudo /etc/init.d/apparmor stop
 sudo update-rc.d -f apparmor remove
+
+fi
 
 JAVA_VERSION=8u171
 
 # sudo apt-get remove -y oracle-java8-installer
 # wget -O jdk8.tar.gz http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-${JAVA_VERSION}-linux-x64.tar.gz
 sudo cp /vagrant/downloads/jdk-${JAVA_VERSION}-linux-x64.tar.gz .
-tar -zxvf jdk-${JAVA_VERSION}-linux-x64.tar.gz
+tar -zxf jdk-${JAVA_VERSION}-linux-x64.tar.gz
 sudo chmod +x jdk1.8.0_171
 sudo mkdir -p /usr/lib/jvm
 sudo mv jdk1.8.0_171 /usr/lib/jvm/jdk1.8.0_171
@@ -138,8 +142,8 @@ ssh-copy-id -i .ssh/id_rsa.pub vagrant@hadoop-dn2
 # Restart the ssh service in all the nodes
 sudo service ssh restart
 
-# sudo cp /vagrant/etc/hosts /etc/hosts
-sudo -- sh -c "cat /vagrant/etc/hosts >> /etc/hosts"
+sudo cp /vagrant/etc/hosts /etc/hosts  # HOSTS FILE NEED REPLACEMENT
+# sudo -- sh -c "cat /vagrant/etc/hosts >> /etc/hosts"
 
 # Copy Hadoop and Zookeeper Configurations
 cp /vagrant/usr/local/hadoop/etc/hadoop/* /usr/local/hadoop/etc/hadoop/
@@ -158,6 +162,6 @@ cp /vagrant/usr/local/zookeeper/conf/* /usr/local/zookeeper/conf/
 # cp /vagrant/home/vagrant/myid-dn2 /home/vagrant/HA/data/zookeeper/myid
 
 # All Nodes
-hadoop-daemon.sh start journalnode
-zkServer.sh start
-mr-jobhistory-daemon.sh start historyserver
+# hadoop-daemon.sh start journalnode
+# zkServer.sh start
+# mr-jobhistory-daemon.sh start historyserver
