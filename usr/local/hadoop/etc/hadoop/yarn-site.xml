@@ -85,7 +85,7 @@
 	</property>
 	<property>
 		<name>yarn.resourcemanager.ha.id</name>
-		<value>hadoop-nn1</value>
+		<value/>
 	</property>
 	<property>
 		<name>yarn.resourcemanager.ha.rm-ids</name>

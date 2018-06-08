@@ -34,7 +34,12 @@ cat /proc/sys/net/ipv6/conf/all/disable_ipv6
 
 # Disable Firewall
 sudo ufw disable
+sudo ufw status
 
+# Remove SE-Linuxl
+apparmor_status
+sudo /etc/init.d/apparmor stop
+sudo update-rc.d -f apparmor remove
 
 JAVA_VERSION=8u171
 
@@ -151,3 +156,8 @@ cp /vagrant/usr/local/zookeeper/conf/* /usr/local/zookeeper/conf/
 
 # In hadoop-dn2
 # cp /vagrant/home/vagrant/myid-dn2 /home/vagrant/HA/data/zookeeper/myid
+
+# All Nodes
+hadoop-daemon.sh start journalnode
+zkServer.sh start
+mr-jobhistory-daemon.sh start historyserver
