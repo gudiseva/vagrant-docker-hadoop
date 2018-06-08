@@ -34,7 +34,7 @@
     <property>
       <name>dfs.namenode.name.dir</name>
       <!-- <value>file:/home/vagrant/HA/data/namenode</value> -->
-      <value>/home/vagrant/HA/data/namenode</value>
+      <value>file:///home/vagrant/HA/data/namenode</value>
     </property>
     <!--
     <property>
@@ -45,7 +45,7 @@
     <property>
       <name>dfs.datanode.data.dir</name>
       <!-- <value>file:/home/vagrant/HA/data/datanode</value> -->
-      <value>/home/vagrant/HA/data/datanode</value>
+      <value>file:///home/vagrant/HA/data/datanode</value>
     </property>
     <!--
     <property>

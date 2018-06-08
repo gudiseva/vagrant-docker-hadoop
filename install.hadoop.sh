@@ -24,6 +24,18 @@ PS1="$DARKGRAY\u@$BOLD$BLUE\h$DARKGRAY:\w\$ $NORMAL"
 
 END
 
+# Disable IPv6 on all nodes
+sudo /bin/su -c "echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.conf"
+sudo /bin/su -c "echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf"
+sudo /bin/su -c "echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf"
+sudo sysctl -p
+
+cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+
+# Disable Firewall
+sudo ufw disable
+
+
 JAVA_VERSION=8u171
 
 # sudo apt-get remove -y oracle-java8-installer
@@ -98,6 +110,9 @@ export PATH=$PATH:$ZOOKEEPER_HOME/bin
 
 END
 
+# cp /vagrant/home/vagrant/.bashrc ~/.bashrc
+source ~/.bashrc
+
 # Generate the SSH key in all the nodes
 # ssh-keygen -t rsa
 echo | ssh-keygen -t rsa -P ''
@@ -108,19 +123,22 @@ cd ..
 
 # On Namenode
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+'
 ssh-copy-id -i .ssh/id_rsa.pub vagrant@hadoop-nn1
 ssh-copy-id -i .ssh/id_rsa.pub vagrant@hadoop-nn2
 ssh-copy-id -i .ssh/id_rsa.pub vagrant@hadoop-dn1
 ssh-copy-id -i .ssh/id_rsa.pub vagrant@hadoop-dn2
+'
 
 # Restart the ssh service in all the nodes
 sudo service ssh restart
 
-sudo cp /vagrant/etc/hosts /etc/hosts
+# sudo cp /vagrant/etc/hosts /etc/hosts
+sudo -- sh -c "cat /vagrant/etc/hosts >> /etc/hosts"
+
+# Copy Hadoop and Zookeeper Configurations
 cp /vagrant/usr/local/hadoop/etc/hadoop/* /usr/local/hadoop/etc/hadoop/
 cp /vagrant/usr/local/zookeeper/conf/* /usr/local/zookeeper/conf/
-# cp /vagrant/home/vagrant/.bashrc ~/.bashrc
-source ~/.bashrc
 
 # In hadoop-nn1
 # cp /vagrant/home/vagrant/myid-nn1 /home/vagrant/HA/data/zookeeper/myid
@@ -133,9 +151,3 @@ source ~/.bashrc
 
 # In hadoop-dn2
 # cp /vagrant/home/vagrant/myid-dn2 /home/vagrant/HA/data/zookeeper/myid
-
-sudo ufw disable
-
-# Get the IP address that VirtualBox has given this VM
-IPADDR=`ifconfig enp0s8 | grep Mask | awk '{print $2}'| cut -f2 -d:`
-echo This VM has IP address $IPADDR

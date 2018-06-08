@@ -2,13 +2,13 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  #config.vm.box = "wesmcclure/ubuntu1404-docker"
-  config.vm.box = "geerlingguy/ubuntu1604"  
-  config.vm.provision "docker"
+  config.vm.box = "wesmcclure/ubuntu1404-docker"
+  #config.vm.box = "geerlingguy/ubuntu1604"  
+  #config.vm.provision "docker"
   config.vm.box_check_update = true
   #config.vm.network "private_network", type: "dhcp"
   config.vm.provision "shell", path: "install.hadoop.sh", privileged: false
-  config.vm.synced_folder "src/", "/srv/website", disabled: false
+  #config.vm.synced_folder "src/", "/srv/website", disabled: false
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--cpus", "1", "--memory", "1536"]
